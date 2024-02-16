@@ -1,0 +1,64 @@
+package com.baddog.videostreaming;
+
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+@RestController
+public class VideoStreamingController {
+
+  @Value("${video-storage.host}")
+  private String videoStorageHost;
+
+  @Value("${video-storage.port}")
+  private String videoStoragePort;
+
+  @GetMapping("/video")
+  public void streamVideo(HttpServletRequest request, HttpServletResponse response)
+      throws IOException {
+    String videoName = "SampleVideo_1280x720_1mb.mp4";
+    String forwardUrl =
+        String.format("http://%s:%s/video?path=%s", videoStorageHost, videoStoragePort, videoName);
+
+    HttpURLConnection connection = (HttpURLConnection) new URL(forwardUrl).openConnection();
+    connection.setRequestMethod("GET");
+
+    // Copy headers from the incoming request to the outgoing request
+    request
+        .getHeaderNames()
+        .asIterator()
+        .forEachRemaining(
+            headerName -> connection.setRequestProperty(headerName, request.getHeader(headerName)));
+
+    // Connect and get response code
+    connection.connect();
+    int responseCode = connection.getResponseCode();
+
+    // Copy response headers from the forwarded response to the current response
+    connection
+        .getHeaderFields()
+        .forEach(
+            (headerName, headerValues) -> {
+              if (headerName != null) {
+                headerValues.forEach(headerValue -> response.addHeader(headerName, headerValue));
+              }
+            });
+
+    response.setStatus(responseCode);
+
+    // Copy response body
+    try (var inputStream = connection.getInputStream();
+        var outputStream = response.getOutputStream()) {
+      byte[] buffer = new byte[4096];
+      int bytesRead;
+      while ((bytesRead = inputStream.read(buffer)) != -1) {
+        outputStream.write(buffer, 0, bytesRead);
+      }
+    }
+  }
+}
