@@ -5,9 +5,13 @@ plugins {
     id("com.diffplug.spotless") version "6.25.0"
 }
 
+springBoot {
+    mainClass.set("com.baddog.history.HistoryApplication")
+}
+
 group = "com.baddog"
 version = "0.0.1-SNAPSHOT"
-description = "Azure Storage Service"
+description = "Streaming History Service"
 
 java {
     sourceCompatibility = JavaVersion.VERSION_17
@@ -23,12 +27,9 @@ repositories {
     mavenCentral()
 }
 
-extra["springCloudAzureVersion"] = "5.9.1"
-
 dependencies {
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.springframework.boot:spring-boot-starter-webflux")
-    implementation("com.azure.spring:spring-cloud-azure-starter-storage")
 
     compileOnly("org.projectlombok:lombok")
     annotationProcessor("org.projectlombok:lombok")
@@ -36,30 +37,43 @@ dependencies {
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("io.projectreactor:reactor-test")
     testCompileOnly("org.projectlombok:lombok:1.18.30")
-    testAnnotationProcessor("org.projectlombok:lombok:1.18.30")
-}
 
-dependencyManagement {
-    imports {
-        mavenBom("com.azure.spring:spring-cloud-azure-dependencies:${property("springCloudAzureVersion")}")
-    }
+    developmentOnly("org.springframework.boot:spring-boot-devtools")
+
+    testImplementation("org.junit.jupiter:junit-jupiter:5.9.2")
+    testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 }
 
 tasks.withType<Test> {
     useJUnitPlatform()
 }
 
-configure<com.diffplug.gradle.spotless.SpotlessExtension> {
-    java {
-        indentWithSpaces()
-        importOrder()
-        googleJavaFormat()
-        removeUnusedImports()
+tasks.register<Copy>("getDependencies") {
+    from(sourceSets.main.get().runtimeClasspath)
+    into("runtime/")
+
+    doFirst {
+        val runtimeDir = File("runtime")
+        runtimeDir.deleteRecursively()
+        runtimeDir.mkdir()
     }
-    kotlin {
-        ktlint()
-    }
-    kotlinGradle {
-        ktlint()
+
+    doLast {
+        File("runtime").deleteRecursively()
     }
 }
+
+//configure<com.diffplug.gradle.spotless.SpotlessExtension> {
+//    java {
+//        indentWithSpaces()
+//        importOrder()
+//        googleJavaFormat()
+//        removeUnusedImports()
+//    }
+//    kotlin {
+//        ktlint()
+//    }
+//    kotlinGradle {
+//        ktlint()
+//    }
+//}

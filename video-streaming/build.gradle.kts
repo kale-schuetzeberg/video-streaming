@@ -7,6 +7,7 @@ plugins {
 
 group = "com.baddog"
 version = "0.0.1-SNAPSHOT"
+description = "Video Streaming Service"
 
 java {
     sourceCompatibility = JavaVersion.VERSION_17
