@@ -8,10 +8,10 @@ services:
     restart: always
 
   azure-storage:
-#    image: azure-storage
+    #    image: azure-storage
     build:
       context: ./azure-storage
-      dockerfile: Dockerfile-dev
+      dockerfile: Dockerfile-prod
     container_name: video-storage
     ports:
       - "4001:80"
@@ -20,29 +20,25 @@ services:
       - STORAGE_ACCOUNT_NAME=${STORAGE_ACCOUNT_NAME}
       - STORAGE_ACCESS_KEY=${STORAGE_ACCESS_KEY}
       - CONTAINER_NAME=${CONTAINER_NAME}
-    volumes:
-      - ./azure-storage/src/main:/app/azure-storage/src/main
     restart: always
 
   history:
-#    image: history
+    #    image: history
     build:
       context: ./history
-      dockerfile: Dockerfile-dev
+      dockerfile: Dockerfile-prod
     container_name: history
     ports:
       - "4002:80"
     environment:
       - PORT=80
-    volumes:
-      - ./history/src/main:/app/history/src/main
     restart: always
 
   video-streaming:
     image: video-streaming
     build:
       context: ./video-streaming
-      dockerfile: Dockerfile-dev
+      dockerfile: Dockerfile-prod
     container_name: video-streaming
     ports:
       - "4003:80"
@@ -51,8 +47,6 @@ services:
       - DBNAME=video-streaming
       - VIDEO_STORAGE_HOST=video-storage
       - VIDEO_STORAGE_PORT=80
-    volumes:
-      - ./video-streaming/src/main:/app/video-streaming/src/main
     depends_on:
       - db
     restart: always

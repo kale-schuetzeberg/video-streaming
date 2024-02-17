@@ -9,6 +9,6 @@ import org.springframework.web.bind.annotation.RestController;
 public class Trial {
   @GetMapping("/test")
   public String getString() {
-    return "I'm commin in hot!";
+    return "I'm commin in hot!!!";
   }
 }

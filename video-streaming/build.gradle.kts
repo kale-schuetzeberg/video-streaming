@@ -18,21 +18,44 @@ repositories {
 }
 
 dependencies {
+    // Web
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.springframework.boot:spring-boot-starter-webflux:3.2.2")
+
+    // Database
     implementation("org.springframework.boot:spring-boot-starter-data-mongodb")
 
+    // Lombok
     compileOnly("org.projectlombok:lombok:1.18.30")
     annotationProcessor("org.projectlombok:lombok:1.18.30")
-
-    testImplementation("org.springframework.boot:spring-boot-starter-test")
-    testImplementation("io.projectreactor:reactor-test")
     testCompileOnly("org.projectlombok:lombok:1.18.30")
     testAnnotationProcessor("org.projectlombok:lombok:1.18.30")
+
+    // Dev tools
+    developmentOnly("org.springframework.boot:spring-boot-devtools")
+
+    // Testing
+    testImplementation("org.springframework.boot:spring-boot-starter-test")
+    testImplementation("io.projectreactor:reactor-test")
 }
 
 tasks.withType<Test> {
     useJUnitPlatform()
+}
+
+tasks.register<Copy>("getDependencies") {
+    from(sourceSets.main.get().runtimeClasspath)
+    into("runtime/")
+
+    doFirst {
+        val runtimeDir = File("runtime")
+        runtimeDir.deleteRecursively()
+        runtimeDir.mkdir()
+    }
+
+    doLast {
+        File("runtime").deleteRecursively()
+    }
 }
 
 configure<com.diffplug.gradle.spotless.SpotlessExtension> {

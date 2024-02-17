@@ -5,10 +5,6 @@ plugins {
     id("com.diffplug.spotless") version "6.25.0"
 }
 
-springBoot {
-    mainClass.set("com.baddog.history.HistoryApplication")
-}
-
 group = "com.baddog"
 version = "0.0.1-SNAPSHOT"
 description = "Streaming History Service"
@@ -28,20 +24,24 @@ repositories {
 }
 
 dependencies {
+    // Web
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.springframework.boot:spring-boot-starter-webflux")
 
-    compileOnly("org.projectlombok:lombok")
-    annotationProcessor("org.projectlombok:lombok")
-
-    testImplementation("org.springframework.boot:spring-boot-starter-test")
-    testImplementation("io.projectreactor:reactor-test")
+    // Lombok
+    compileOnly("org.projectlombok:lombok:1.18.30")
+    annotationProcessor("org.projectlombok:lombok:1.18.30")
     testCompileOnly("org.projectlombok:lombok:1.18.30")
+    testAnnotationProcessor("org.projectlombok:lombok:1.18.30")
 
+    // Dev tools
     developmentOnly("org.springframework.boot:spring-boot-devtools")
 
+    // Test
     testImplementation("org.junit.jupiter:junit-jupiter:5.9.2")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+    testImplementation("org.springframework.boot:spring-boot-starter-test")
+    testImplementation("io.projectreactor:reactor-test")
 }
 
 tasks.withType<Test> {
@@ -63,17 +63,17 @@ tasks.register<Copy>("getDependencies") {
     }
 }
 
-//configure<com.diffplug.gradle.spotless.SpotlessExtension> {
-//    java {
-//        indentWithSpaces()
-//        importOrder()
-//        googleJavaFormat()
-//        removeUnusedImports()
-//    }
-//    kotlin {
-//        ktlint()
-//    }
-//    kotlinGradle {
-//        ktlint()
-//    }
-//}
+configure<com.diffplug.gradle.spotless.SpotlessExtension> {
+    java {
+        indentWithSpaces()
+        importOrder()
+        googleJavaFormat()
+        removeUnusedImports()
+    }
+    kotlin {
+        ktlint()
+    }
+    kotlinGradle {
+        ktlint()
+    }
+}

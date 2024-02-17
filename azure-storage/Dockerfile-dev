@@ -1,10 +1,10 @@
 FROM amazoncorretto:17
 LABEL authors="baddog"
 
-WORKDIR /app/history
-COPY . /app/history
+WORKDIR /app/azure-storage
+COPY . /app/azure-storage
 
-EXPOSE 4002
+EXPOSE 4001
 
 # Fetch project dependencies
 RUN chmod +x start.sh && ./gradlew getDependencies
