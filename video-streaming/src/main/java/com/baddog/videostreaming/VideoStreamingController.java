@@ -5,12 +5,17 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.List;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
+@RequiredArgsConstructor
 public class VideoStreamingController {
+  private final VideoRepo videoRepo;
 
   @Value("${video-storage.host}")
   private String videoStorageHost;
@@ -18,12 +23,19 @@ public class VideoStreamingController {
   @Value("${video-storage.port}")
   private String videoStoragePort;
 
+  @GetMapping("/videos")
+  public List<VideoDO> getAllVideos() {
+    return videoRepo.findAll();
+  }
+
   @GetMapping("/video")
-  public void streamVideo(HttpServletRequest request, HttpServletResponse response)
+  public void streamVideo(
+      @RequestParam("id") String id, HttpServletRequest request, HttpServletResponse response)
       throws IOException {
-    String videoName = "SampleVideo_1280x720_1mb.mp4";
+    VideoDO video = videoRepo.getVideoById(id);
     String forwardUrl =
-        String.format("http://%s:%s/video?path=%s", videoStorageHost, videoStoragePort, videoName);
+        String.format(
+            "http://%s:%s/video?path=%s", videoStorageHost, videoStoragePort, video.getVideoPath());
 
     HttpURLConnection connection = (HttpURLConnection) new URL(forwardUrl).openConnection();
     connection.setRequestMethod("GET");

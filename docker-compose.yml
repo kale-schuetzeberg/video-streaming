@@ -31,8 +31,10 @@ services:
       - "4002:80"
     environment:
       - PORT=80
-      - DBHOST=mongodb://27017
+      - DBHOST=localhost
       - DBNAME=video-streaming
       - VIDEO_STORAGE_HOST=video-storage
       - VIDEO_STORAGE_PORT=80
+    depends_on:
+      - db
     restart: "no"
