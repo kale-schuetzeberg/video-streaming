@@ -43,3 +43,5 @@ spring-boot-starter-*/build/
 
 # Dependency directory (node_modules, bower_components, etc.)
 node_modules/
+
+environment-variable-setup.bash
