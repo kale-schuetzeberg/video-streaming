@@ -7,7 +7,7 @@ COPY . /app/azure-storage
 EXPOSE 4001
 
 # Fetch project dependencies
-RUN chmod +x start.sh && ./gradlew getDependencies
+RUN chmod +x ./scripts/start.sh && ./gradlew getDependencies
 
 # script which watches source file changes in background and executes bootRun
 CMD ["bash", "start.sh"]
