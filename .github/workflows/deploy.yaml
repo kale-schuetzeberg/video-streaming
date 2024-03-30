@@ -27,7 +27,10 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: Build Gradle Project
-        run: ./gradlew build
+        run: |
+          cd ./azure-storage
+          ./gradlew build
+        
 
       # Build the docker image
       - name: Build
