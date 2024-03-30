@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: azure-storage
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: azure-storage
+  template:
+    metadata:
+      labels:
+        app: azure-storage
+    spec:
+      containers:
+        - name: azure-storage
+          image: nodenavi.azurecr.io/azure-storage:0.0.1
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: PORT
+              value: "80"  # This matches the container's internal port which your application listens on
+            - name: STORAGE_ACCOUNT_NAME
+              value: $STORAGE_ACCOUNT_NAME
+            - name: STORAGE_ACCESS_KEY
+              value: $STORAGE_ACCESS_KEY
+            - name: CONTAINER_NAME
+              value: $CONTAINER_NAME
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: azure-storage
+spec:
+  selector:
+    app: azure-storage
+  type: LoadBalancer
+  ports:
+    - protocol: TCP
+      port: 4001 # This is the external port
+      targetPort: 80 # This targets the internal port which your application listens on
