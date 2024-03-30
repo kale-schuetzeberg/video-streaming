@@ -1,4 +1,4 @@
-FROM amazoncorretto:17
+FROM amazoncorretto:17 as base
 LABEL authors="kale-schuetzeberg"
 VOLUME /tmp
 COPY build/libs/*.jar app.jar
