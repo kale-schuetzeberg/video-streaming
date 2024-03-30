@@ -1,0 +1,45 @@
+name: Deploy microservice
+
+on:
+  # Deploy the microservice on push to the main branch of the code repo
+#  push:
+#    branches:
+#      - main
+
+  # Allow deployment to be invoked manually through the GitHub Actions user interface
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: amazoncorretto:17
+
+    env:
+      VERSION: ${{ secrets.AZURE_STORAGE_VERSION }}
+      CONTAINER_REGISTRY: ${{ secrets.CONTAINER_REGISTRY }}
+      REGISTRY_UN: ${{ secrets.REGISTRY_UN }}
+      REGISTRY_PW: ${{ secrets.REGISTRY_PW }}
+      STORAGE_ACCOUNT_NAME: ${{ secrets.STORAGE_ACCOUNT_NAME }}
+      STORAGE_ACCESS_KEY: ${{ secrets.STORAGE_ACCESS_KEY }}
+      CONTAINER_NAME: ${{ secrets.CONTAINER_NAME }}
+
+    steps:
+      # Check out repo
+      - uses: actions/checkout@v4
+
+      # Build the docker image
+      - name: Build
+        run: ./azure-storage/scripts/build-image.sh
+
+      # Publish the Docker image to the container registry
+      - name: Publish
+        run: ./azure-storage/scripts/push-image.sh
+
+      # Install Kubectl and connect to the cluster
+      - uses: tale/kubectl-action@v1
+        with:
+          base64-kube-config: ${{ secrets.KUBE_CONFIG }}
+          kubectl-version: v1.29.1
+
+      # Deploy the microservice
+      - name: Deploy
+        run: ./azure-storage/scripts/deploy.sh

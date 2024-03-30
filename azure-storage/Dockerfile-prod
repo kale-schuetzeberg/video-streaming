@@ -1,5 +1,6 @@
 FROM amazoncorretto:17
-LABEL authors="baddog"
+LABEL authors="kale-schuetzeberg"
 VOLUME /tmp
 COPY build/libs/*.jar app.jar
+FROM base AS x86
 ENTRYPOINT ["java","-jar","/app.jar"]
