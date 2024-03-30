@@ -11,7 +11,7 @@ on:
 
 jobs:
   deploy:
-    runs-on: amazoncorretto:17
+    runs-on: ubuntu-latest
 
     env:
       VERSION: ${{ secrets.AZURE_STORAGE_VERSION }}
