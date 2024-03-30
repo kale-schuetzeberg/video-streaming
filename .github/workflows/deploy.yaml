@@ -26,6 +26,9 @@ jobs:
       # Check out repo
       - uses: actions/checkout@v4
 
+      - name: Build Gradle Project
+        run: ./gradlew build
+
       # Build the docker image
       - name: Build
         run: ./azure-storage/scripts/build-image.sh
