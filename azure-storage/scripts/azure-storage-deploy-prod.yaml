@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: azure-storage
-          image: nodenavi.azurecr.io/azure-storage:0.0.1
+          image: nodenavi.azurecr.io/azure-storage:0.0.1 # TODO: pull container registry and version from dev secrets
           imagePullPolicy: IfNotPresent
           env:
             - name: PORT

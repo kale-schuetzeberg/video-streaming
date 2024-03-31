@@ -1,0 +1,35 @@
+name: Delete microservice
+
+on:
+  # Allow delete to be invoked manually through the GitHub Actions user interface
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    # Set environment variables
+    # TODO: remove unused environment variables
+    env:
+      VERSION: ${{ secrets.AZURE_STORAGE_VERSION }}
+      CONTAINER_REGISTRY: ${{ secrets.CONTAINER_REGISTRY }}
+      REGISTRY_UN: ${{ secrets.REGISTRY_UN }}
+      REGISTRY_PW: ${{ secrets.REGISTRY_PW }}
+      STORAGE_ACCOUNT_NAME: ${{ secrets.STORAGE_ACCOUNT_NAME }}
+      STORAGE_ACCESS_KEY: ${{ secrets.STORAGE_ACCESS_KEY }}
+      CONTAINER_NAME: ${{ secrets.CONTAINER_NAME }}
+      PORT: ${{ secrets.PORT }}
+
+    steps:
+      # Check out repo
+      - uses: actions/checkout@v4
+
+      # Setup JDK
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+
+      - name: Delete
+        run: ./azure-storage/scripts/delete.sh

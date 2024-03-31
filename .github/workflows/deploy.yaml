@@ -13,6 +13,7 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
 
+    # Set environment variables
     env:
       VERSION: ${{ secrets.AZURE_STORAGE_VERSION }}
       CONTAINER_REGISTRY: ${{ secrets.CONTAINER_REGISTRY }}
@@ -34,11 +35,11 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
 
+      # Build the project
       - name: Build Gradle Project
         run: |
           cd ./azure-storage
           ./gradlew clean build --stacktrace
-        
 
       # Build the docker image
       - name: Build
