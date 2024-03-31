@@ -30,7 +30,7 @@ jobs:
       - name: Build Gradle Project
         run: |
           cd ./azure-storage
-          ./gradlew build
+          ./gradlew clean build
         
 
       # Build the docker image
