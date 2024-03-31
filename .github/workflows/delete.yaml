@@ -31,5 +31,12 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
 
+      # Install Kubectl and connect to the cluster
+      - uses: tale/kubectl-action@v1
+        with:
+          base64-kube-config: ${{ secrets.KUBE_CONFIG }}
+          kubectl-version: v1.29.1
+
+      # Delete the cluster
       - name: Delete
         run: ./azure-storage/scripts/delete.sh
