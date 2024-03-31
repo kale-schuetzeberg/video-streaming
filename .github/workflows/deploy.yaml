@@ -21,6 +21,7 @@ jobs:
       STORAGE_ACCOUNT_NAME: ${{ secrets.STORAGE_ACCOUNT_NAME }}
       STORAGE_ACCESS_KEY: ${{ secrets.STORAGE_ACCESS_KEY }}
       CONTAINER_NAME: ${{ secrets.CONTAINER_NAME }}
+      PORT: ${{ secrets.PORT }}
 
     steps:
       # Check out repo
