@@ -56,7 +56,6 @@ The decision was made to use Spring Boot for a few reasons:
 - [ ] Integrate unit and integration tests into GitHub Actions CI/CD pipeline.
 - [ ] Expand scope of GitHub Actions to all microservice projects.
 - [ ] Integrate with UI.
-- [ ] Host Terraform code on GitHub (currently researching security risk).
 - [ ] Compute resource tuning.
 - [ ] Architectural diagrams.
 - [ ] Set GitHub Secrets when terraform procures infrastructure
