@@ -29,10 +29,8 @@ Thus, I want to stress that this project isn't a simple fork of the project file
 complete port of the project.
 
 The decision was made to use Spring Boot for a few reasons:
-
 - Increase challenge and therefore knowledge gained.
 - Prevent myself from using copy-pasta thus forcing me to understand everything.
-- Allow me to present the project as my own*.
 - I want to know how microservices work in a Spring Boot setting.
 
 ## Current Application State
@@ -51,8 +49,9 @@ The decision was made to use Spring Boot for a few reasons:
 
 ## Future Milestones
 
+- [ ] Kubernetes deploy.yaml file for all microservice projects.
+- [ ] Implement database fixtures 
 - [ ] Provision all infrastructure required for project with Terraform.
-- [ ] Code Kubernetes deploy.yaml file for all microservice projects.
 - [ ] Add unit and integration tests to all microservice projects.
 - [ ] Integrate unit and integration tests into GitHub Actions CI/CD pipeline.
 - [ ] Expand scope of GitHub Actions to all microservice projects.

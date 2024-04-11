@@ -81,10 +81,4 @@ public class VideoStreamingController {
     enqueueDequeService.publishMessage(video);
     return "Message sent to RabbitMQ.";
   }
-
-  //  @PostMapping("/publish")
-  //  public String publishMessage(@RequestBody FooDO foo) {
-  //    enqueueDequeService.publishMessage(foo);
-  //    return "Message sent to RabbitMQ.";
-  //  }
 }

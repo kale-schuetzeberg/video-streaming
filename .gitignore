@@ -43,3 +43,20 @@ spring-boot-starter-*/build/
 
 # Dependency directory (node_modules, bower_components, etc.)
 node_modules/
+
+# Terraform
+**/.terraform/*
+# .tfstate files
+*.tfstate
+*.tfstate.*
+crash.log
+crash.*.log
+*.tfvars
+*.tfvars.json
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+.terraformrc
+terraform.rc
+.terraform.lock.hcl
