@@ -1,0 +1,34 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: history
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: history
+  template:
+    metadata:
+      labels:
+        app: history
+    spec:
+      containers:
+        - name: history
+          image: history:0.0.1 # TODO: pull container registry and version from dev secrets
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: PORT
+              value: "80" # This matches the container's internal port which your application listens on
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: history
+spec:
+  selector:
+    app: history
+  type: LoadBalancer
+  ports:
+    - protocol: TCP
+      port: 4002 # This is the external port
+      targetPort: 80 # This targets the internal port which your application listens on
