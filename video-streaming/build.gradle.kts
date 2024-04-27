@@ -13,6 +13,12 @@ java {
     sourceCompatibility = JavaVersion.VERSION_17
 }
 
+configurations {
+    compileOnly {
+        extendsFrom(configurations.annotationProcessor.get())
+    }
+}
+
 repositories {
     mavenCentral()
 }
@@ -20,7 +26,6 @@ repositories {
 dependencies {
     // Web
     implementation("org.springframework.boot:spring-boot-starter-web")
-    implementation("org.springframework.boot:spring-boot-starter-webflux:3.2.2")
 
     // MongoDB
     implementation("org.springframework.boot:spring-boot-starter-data-mongodb")
@@ -40,7 +45,6 @@ dependencies {
 
     // Testing
     testImplementation("org.springframework.boot:spring-boot-starter-test")
-    testImplementation("io.projectreactor:reactor-test")
 }
 
 tasks.withType<Test> {

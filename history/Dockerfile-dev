@@ -10,4 +10,4 @@ EXPOSE 4002
 RUN chmod +x ./scripts/start.sh && ./gradlew getDependencies
 
 # script which watches source file changes in background and executes bootRun
-CMD ["bash", "start.sh"]
+CMD ["bash", "./scripts/start.sh"]

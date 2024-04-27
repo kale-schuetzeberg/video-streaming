@@ -6,8 +6,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication
 public class DatabaseFixtureApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(DatabaseFixtureApplication.class, args);
-	}
-
+  public static void main(String[] args) {
+    SpringApplication.run(DatabaseFixtureApplication.class, args);
+  }
 }
