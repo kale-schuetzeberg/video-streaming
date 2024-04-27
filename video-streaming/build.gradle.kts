@@ -22,7 +22,6 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.springframework.boot:spring-boot-starter-webflux:3.2.2")
 
-    // Database
     // MongoDB
     implementation("org.springframework.boot:spring-boot-starter-data-mongodb")
 
