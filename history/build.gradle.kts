@@ -26,7 +26,6 @@ repositories {
 dependencies {
     // Web
     implementation("org.springframework.boot:spring-boot-starter-web")
-    implementation("org.springframework.boot:spring-boot-starter-webflux")
 
     // RabbitMQ
     implementation("org.springframework.boot:spring-boot-starter-amqp")
@@ -42,10 +41,7 @@ dependencies {
     developmentOnly("org.springframework.boot:spring-boot-devtools")
 
     // Test
-    testImplementation("org.junit.jupiter:junit-jupiter:5.9.2")
-    testRuntimeOnly("org.junit.platform:junit-platform-launcher")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
-    testImplementation("io.projectreactor:reactor-test")
 }
 
 tasks.withType<Test> {

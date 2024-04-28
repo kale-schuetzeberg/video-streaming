@@ -29,7 +29,6 @@ extra["springCloudAzureVersion"] = "5.9.1"
 dependencies {
     // Web
     implementation("org.springframework.boot:spring-boot-starter-web")
-    implementation("org.springframework.boot:spring-boot-starter-webflux")
 
     // Azure
     implementation("com.azure.spring:spring-cloud-azure-starter-storage")
@@ -44,10 +43,7 @@ dependencies {
     developmentOnly("org.springframework.boot:spring-boot-devtools")
 
     // Test
-    testImplementation("org.junit.jupiter:junit-jupiter:5.9.2")
-    testRuntimeOnly("org.junit.platform:junit-platform-launcher")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
-    testImplementation("io.projectreactor:reactor-test")
 }
 
 dependencyManagement {
