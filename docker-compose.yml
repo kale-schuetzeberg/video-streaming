@@ -1,28 +1,28 @@
 version: '3'
 services:
-  db:
-    image: mongo:7.0.0
-    container_name: db
-    ports:
-      - "4000:27017"
-    restart: always
-
-#  azure-storage:
-#    image: azure-storage:0.0.1
-#    build:
-#      context: ./azure-storage
-#      dockerfile: Dockerfile-dev
-#    container_name: video-storage
+#  db:
+#    image: mongo:7.0.0
+#    container_name: db
 #    ports:
-#      - "4001:80"
-#    environment:
-#      - PORT=80
-#      - STORAGE_ACCOUNT_NAME=${STORAGE_ACCOUNT_NAME}
-#      - STORAGE_ACCESS_KEY=${STORAGE_ACCESS_KEY}
-#      - CONTAINER_NAME=${CONTAINER_NAME}
-#    volumes:
-#      - ./azure-storage/src/main:/app/azure-storage/src/main
+#      - "4000:27017"
 #    restart: always
+#
+  azure-storage:
+    image: azure-storage:0.0.1
+    build:
+      context: ./azure-storage
+      dockerfile: Dockerfile-dev
+    container_name: video-storage
+    ports:
+      - "4001:80"
+    environment:
+      - PORT=80
+      - STORAGE_ACCOUNT_NAME=${STORAGE_ACCOUNT_NAME}
+      - STORAGE_ACCESS_KEY=${STORAGE_ACCESS_KEY}
+      - CONTAINER_NAME=${CONTAINER_NAME}
+    volumes:
+      - ./azure-storage/src/main:/app/azure-storage/src/main
+    restart: always
 #
 #  history:
 #    image: history:0.0.1
@@ -66,19 +66,19 @@ services:
 #      - "5672:5672" #
 #      - "15672:15672" # Access RabbitMQ dashboard
 #    restart: always
-
-  database-fixture:
-    image: database-fixture:0.0.1
-    build:
-      context: ./database-fixture
-      dockerfile: Dockerfile-dev
-    container_name: database-fixture
-    ports:
-      - "4004:80"
-    environment:
-      - PORT=80
-      - DBNAME=video_library
-      - COLLECTION_NAME=videos
-    volumes:
-      - ./database-fixture/src/main:/app/database-fixture/src/main
-    restart: "no"
+#
+#  database-fixture:
+#    image: database-fixture:0.0.1
+#    build:
+#      context: ./database-fixture
+#      dockerfile: Dockerfile-dev
+#    container_name: database-fixture
+#    ports:
+#      - "4004:80"
+#    environment:
+#      - PORT=80
+#      - DBNAME=video_library
+#      - COLLECTION_NAME=videos
+#    volumes:
+#      - ./database-fixture/src/main:/app/database-fixture/src/main
+#    restart: "no"
