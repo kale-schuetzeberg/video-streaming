@@ -26,6 +26,8 @@ repositories {
 dependencies {
     // Web
     implementation("org.springframework.boot:spring-boot-starter-web")
+    implementation("org.springframework:spring-web:6.1.6")
+    implementation("org.springframework:spring-webflux:6.1.6")
 
     // MongoDB
     implementation("org.springframework.boot:spring-boot-starter-data-mongodb")
