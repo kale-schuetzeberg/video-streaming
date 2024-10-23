@@ -76,5 +76,5 @@ The decision was made to use Spring Boot for a few reasons:
 | STORAGE_ACCESS_KEY    | Azure Storage Account Key                                                                                                   |
 | STORAGE_ACCOUNT_NAME  | Azure Storage Account Name                                                                                                  |
 
-Sudo User, <br>
-Kale Schuetzeberg
+Sudo User,  
+baddog

@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: video-streaming
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: video-streaming
+  template:
+    metadata:
+      labels:
+        app:
+          video-streaming
+    spec:
+      containers:
+        - name: video-streaming
+          image: todo
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: PORT
+              value: "80" # This matches the container's internal port which your application listens on
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: video-streaming
+spec:
+  selector:
+    app:
+      video-streaming
+  type: LoadBalancer
+  ports:
+    - protocol: TCP
+      port: 4003 # This is the external port
+      targetPort: 80 # This targets the internal port which your application listens on
