@@ -7,22 +7,22 @@ services:
       - "4000:27017"
     restart: always
 
-#  azure-storage:
-#    image: azure-storage:0.0.1
-#    build:
-#      context: ./azure-storage
-#      dockerfile: Dockerfile-dev
-#    container_name: video-storage
-#    ports:
-#      - "4001:80"
-#    environment:
-#      - PORT=80
-#      - STORAGE_ACCOUNT_NAME=${STORAGE_ACCOUNT_NAME}
-#      - STORAGE_ACCESS_KEY=${STORAGE_ACCESS_KEY}
-#      - CONTAINER_NAME=${CONTAINER_NAME}
-#    volumes:
-#      - ./azure-storage/src/main:/app/azure-storage/src/main
-#    restart: always
+  azure-storage:
+    image: azure-storage:0.0.1
+    build:
+      context: ./azure-storage
+      dockerfile: Dockerfile-dev
+    container_name: video-storage
+    ports:
+      - "4001:80"
+    environment:
+      - PORT=80
+      - STORAGE_ACCOUNT_NAME=${STORAGE_ACCOUNT_NAME}
+      - STORAGE_ACCESS_KEY=${STORAGE_ACCESS_KEY}
+      - CONTAINER_NAME=${CONTAINER_NAME}
+    volumes:
+      - ./azure-storage/src/main:/app/azure-storage/src/main
+    restart: always
 #
 #  history:
 #    image: history:0.0.1
@@ -38,34 +38,34 @@ services:
 #      - ./history/src/main:/app/history/src/main
 #    restart: "no"
 #
-#  video-streaming:
-#    image: video-streaming:0.0.1
-#    build:
-#      context: ./video-streaming
-#      dockerfile: Dockerfile-dev
-#    container_name: video-streaming
-#    ports:
-#      - "4003:80"
-#    environment:
-#      - PORT=80
-#      - DBNAME=video_library
-#      - COLLECTION_NAME=videos
-#      - VIDEO_STORAGE_HOST=video-storage
-#      - VIDEO_STORAGE_PORT=80
-#    volumes:
-#      - ./video-streaming/src/main:/app/video-streaming/src/main
-#    depends_on:
-#      - db
-#    restart: "no"
-#
-#  rabbit:
-#    hostname: rabbitmq
-#    image: rabbitmq:3.12.13-management
-#    container_name: rabbit
-#    ports:
-#      - "5672:5672" #
-#      - "15672:15672" # Access RabbitMQ dashboard
-#    restart: always
+  video-streaming:
+    image: video-streaming:0.0.1
+    build:
+      context: ./video-streaming
+      dockerfile: Dockerfile-dev
+    container_name: video-streaming
+    ports:
+      - "4003:80"
+    environment:
+      - PORT=80
+      - DBNAME=video_library
+      - COLLECTION_NAME=videos
+      - VIDEO_STORAGE_HOST=video-storage
+      - VIDEO_STORAGE_PORT=80
+    volumes:
+      - ./video-streaming/src/main:/app/video-streaming/src/main
+    depends_on:
+      - db
+    restart: "no"
+
+  rabbit:
+    hostname: rabbitmq
+    image: rabbitmq:3.12.13-management
+    container_name: rabbit
+    ports:
+      - "5672:5672" #
+      - "15672:15672" # Access RabbitMQ dashboard
+    restart: always
 
   database-fixture:
     image: database-fixture:0.0.1

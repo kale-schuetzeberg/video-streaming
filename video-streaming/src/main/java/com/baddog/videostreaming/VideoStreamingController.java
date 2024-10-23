@@ -29,6 +29,7 @@ public class VideoStreamingController {
     return videoRepo.findAll();
   }
 
+  // TODO: Convert to WebFlux
   @GetMapping("/video")
   public void streamVideo(
       @RequestParam("id") String id, HttpServletRequest request, HttpServletResponse response)
@@ -38,7 +39,7 @@ public class VideoStreamingController {
 
     String forwardUrl =
         String.format(
-            "http://%s:%s/video?path=%s", videoStorageHost, videoStoragePort, video.getVideoPath());
+            "http://%s:%s/video?id=%s", videoStorageHost, videoStoragePort, video.getVideoPath());
 
     HttpURLConnection connection = (HttpURLConnection) new URL(forwardUrl).openConnection();
     connection.setRequestMethod("GET");
@@ -77,8 +78,7 @@ public class VideoStreamingController {
     }
   }
 
-  public String publishMessage(VideoDO video) {
+  public void publishMessage(VideoDO video) {
     enqueueDequeService.publishMessage(video);
-    return "Message sent to RabbitMQ.";
   }
 }
