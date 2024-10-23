@@ -14,8 +14,8 @@ spec:
     spec:
       containers:
         - name: history
-          image: history:0.0.1 # TODO: pull container registry and version from dev secrets
-          imagePullPolicy: IfNotPresent
+          image: history:0.0.1
+          imagePullPolicy: Never
           env:
             - name: PORT
               value: "80" # This matches the container's internal port which your application listens on
@@ -27,7 +27,7 @@ metadata:
 spec:
   selector:
     app: history
-  type: LoadBalancer
+  type: ClusterIP
   ports:
     - protocol: TCP
       port: 4002 # This is the external port

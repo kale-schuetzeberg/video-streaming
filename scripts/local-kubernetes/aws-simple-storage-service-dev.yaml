@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: aws-simple-storage-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: aws-simple-storage-service
+  template:
+    metadata:
+      labels:
+        app: aws-simple-storage-service
+    spec:
+      containers:
+        - name: aws-simple-storage-service
+          image: aws-simple-storage-service:0.0.1
+          imagePullPolicy: Never
+          env:
+            - name: PORT
+              value: "80" # This matches the container's internal port which your application listens on
+            - name: AWS_REGION
+              value: "us-east-1"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: aws-simple-storage-service
+spec:
+  selector:
+    app: aws-simple-storage-service
+  type: ClusterIP
+  ports:
+    - protocol: TCP
+      port: 4001 # This is the external port
+      targetPort: 80 # This targets the internal port which your application listens on

@@ -1,17 +1,18 @@
 plugins {
     java
-    id("org.springframework.boot") version "3.2.2"
-    id("io.spring.dependency-management") version "1.1.4"
+    id("org.springframework.boot") version "3.3.4"
+    id("io.spring.dependency-management") version "1.1.6"
     id("com.diffplug.spotless") version "6.25.0"
 }
 
 group = "com.baddog"
 version = "0.0.1-SNAPSHOT"
-description = "Azure Storage Service"
+description = "AWS Simple Storage Service"
 
 java {
-    sourceCompatibility = JavaVersion.VERSION_17
-    targetCompatibility = JavaVersion.VERSION_17
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(17)
+    }
 }
 
 configurations {
@@ -24,19 +25,20 @@ repositories {
     mavenCentral()
 }
 
-extra["springCloudAzureVersion"] = "5.9.1"
-
 dependencies {
     // Web
-    implementation("org.springframework.boot:spring-boot-starter-web")
-    implementation("org.springframework:spring-webflux:6.1.6")
+    implementation("org.springframework.boot:spring-boot-starter-web:3.3.5")
 
-    // Azure
-    implementation("com.azure.spring:spring-cloud-azure-starter-storage")
+    // AWS Simple Storage Service
+    implementation(platform("software.amazon.awssdk:bom:2.20.56"))
+    implementation("software.amazon.awssdk:s3")
+    implementation("software.amazon.awssdk:sso")
+    implementation("software.amazon.awssdk:ssooidc")
+    implementation("com.amazonaws:aws-java-sdk-s3:1.12.777")
 
     // Lombok
-    compileOnly("org.projectlombok:lombok:1.18.30")
-    annotationProcessor("org.projectlombok:lombok:1.18.30")
+    compileOnly("org.projectlombok:lombok")
+    annotationProcessor("org.projectlombok:lombok")
     testCompileOnly("org.projectlombok:lombok:1.18.30")
     testAnnotationProcessor("org.projectlombok:lombok:1.18.30")
 
@@ -45,12 +47,8 @@ dependencies {
 
     // Test
     testImplementation("org.springframework.boot:spring-boot-starter-test")
-}
-
-dependencyManagement {
-    imports {
-        mavenBom("com.azure.spring:spring-cloud-azure-dependencies:${property("springCloudAzureVersion")}")
-    }
+    testImplementation("io.projectreactor:reactor-test")
+    testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 }
 
 tasks.withType<Test> {
@@ -71,6 +69,7 @@ tasks.register<Copy>("getDependencies") {
         File("runtime").deleteRecursively()
     }
 }
+
 
 configure<com.diffplug.gradle.spotless.SpotlessExtension> {
     java {

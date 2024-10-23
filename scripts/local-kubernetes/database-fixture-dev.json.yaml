@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: database-fixture
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: database-fixture
+  template:
+    metadata:
+      labels:
+        app: database-fixture
+    spec:
+      containers:
+        - name: database-fixture
+          image: database-fixture:0.0.1
+          imagePullPolicy: Never
+          env:
+            - name: PORT
+              value: "80" # This matches the container's internal port which your application listens on
+            - name: DBNAME
+              value: "video_library"
+            - name: COLLECTION_NAME
+              value: "videos"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: database-fixture
+spec:
+  selector:
+    app: database-fixture
+  type: LoadBalancer
+  ports:
+    - protocol: TCP
+      port: 4004 # This is the external port
+      targetPort: 80 # This targets the internal port which your application listens on
