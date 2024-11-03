@@ -1,8 +1,12 @@
 package com.baddog.aws_simple_storage_service.service;
 
-import com.amazonaws.services.s3.model.Bucket;
-import java.util.List;
+import com.amazonaws.services.s3.model.ObjectListing;
+import java.nio.ByteBuffer;
+import reactor.core.publisher.Flux;
 
 public interface BucketServiceInterface {
-  List<Bucket> getBucketList();
+
+  ObjectListing getBucketObjects(String bucket);
+
+  Flux<ByteBuffer> getObject(String bucket, String key);
 }

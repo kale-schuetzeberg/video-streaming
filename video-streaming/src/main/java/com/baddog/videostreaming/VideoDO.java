@@ -8,5 +8,6 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @Data
 public class VideoDO {
   @Id private String id;
-  private String videoPath;
+  private String bucket;
+  private String key;
 }

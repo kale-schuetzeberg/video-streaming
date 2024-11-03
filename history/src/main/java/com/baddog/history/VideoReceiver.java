@@ -17,8 +17,8 @@ public class VideoReceiver {
 
   @RabbitListener(queues = "${rabbitmq.queue-name}")
   public void handleMessage(VideoDO video) {
-    System.out.println("Received message from queue " + queueName + ": " + video.getVideoPath());
-    viewed.add(video.getVideoPath());
+    System.out.println("Received message from queue " + queueName + ": " + video.getKey());
+    viewed.add(video.getKey());
     System.out.println(viewed.size());
   }
 }

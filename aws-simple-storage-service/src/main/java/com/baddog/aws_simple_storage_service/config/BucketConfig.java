@@ -9,13 +9,8 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class BucketConfig {
-  // TODO: Upgrade to SSO credentials
-  // https://stackoverflow.com/questions/64062720/aws-java-sdk-not-finding-profile-when-using-aws-sso
   @Bean
   public AmazonS3 getAmazonS3Client() {
-    return AmazonS3ClientBuilder.standard()
-        .withCredentials(new EnvironmentVariableCredentialsProvider())
-        .withRegion(Regions.US_EAST_1)
-        .build();
+    return AmazonS3ClientBuilder.standard().withCredentials(new EnvironmentVariableCredentialsProvider()).withRegion(Regions.US_EAST_1).build();
   }
 }

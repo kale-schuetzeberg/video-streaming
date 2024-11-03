@@ -5,5 +5,6 @@ import lombok.Data;
 @Data
 public class VideoDO {
   private String id;
-  private String videoPath;
+  private String bucket;
+  private String key;
 }
