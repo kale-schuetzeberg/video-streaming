@@ -11,6 +11,9 @@ import org.springframework.context.annotation.Configuration;
 public class BucketConfig {
   @Bean
   public AmazonS3 getAmazonS3Client() {
-    return AmazonS3ClientBuilder.standard().withCredentials(new EnvironmentVariableCredentialsProvider()).withRegion(Regions.US_EAST_1).build();
+    return AmazonS3ClientBuilder.standard()
+        .withCredentials(new EnvironmentVariableCredentialsProvider())
+        .withRegion(Regions.US_EAST_1)
+        .build();
   }
 }

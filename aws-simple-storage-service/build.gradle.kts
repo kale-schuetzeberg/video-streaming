@@ -27,7 +27,7 @@ repositories {
 
 dependencies {
     // Web
-    implementation("org.springframework.boot:spring-boot-starter-webflux")
+    implementation("org.springframework.boot:spring-boot-starter-web:3.3.5")
 
     // AWS Simple Storage Service
     implementation(platform("software.amazon.awssdk:bom:2.20.56"))
