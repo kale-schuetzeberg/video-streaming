@@ -39,7 +39,7 @@ public class VideoStreamingController {
 
     String forwardUrl =
         String.format(
-            "http://%s:%s/video?id=%s", videoStorageHost, videoStoragePort, video.getVideoPath());
+            "http://%s:%s/get-object?bucket=%s&key=%s", videoStorageHost, videoStoragePort, video.getBucket(), video.getKey());
 
     HttpURLConnection connection = (HttpURLConnection) new URL(forwardUrl).openConnection();
     connection.setRequestMethod("GET");
