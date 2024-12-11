@@ -32,6 +32,7 @@ build_image "video-streaming" "0.0.1" "../../video-streaming/Dockerfile-dev ../.
 
 deploy_kubernetes_resource "rabbitmq-dev.yaml"
 deploy_kubernetes_resource "mongodb-dev.yaml"
+deploy_kubernetes_resource "aws-simple-storage-service-dev-secrets.yaml"
 deploy_kubernetes_resource "aws-simple-storage-service-dev.yaml"
 deploy_kubernetes_resource "database-fixture-dev.json.yaml"
 deploy_kubernetes_resource "history-dev.yaml"

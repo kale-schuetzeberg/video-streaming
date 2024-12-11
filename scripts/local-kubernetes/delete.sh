@@ -9,6 +9,7 @@ function delete_kubernetes_resource() {
 
 delete_kubernetes_resource "rabbitmq-dev.yaml"
 delete_kubernetes_resource "mongodb-dev.yaml"
+delete_kubernetes_resource "aws-simple-storage-service-dev-secrets.yaml"
 delete_kubernetes_resource "aws-simple-storage-service-dev.yaml"
 delete_kubernetes_resource "database-fixture-dev.json.yaml"
 delete_kubernetes_resource "history-dev.yaml"
