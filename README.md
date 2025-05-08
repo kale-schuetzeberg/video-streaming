@@ -1,5 +1,27 @@
 # Hello, and welcome to my *ongoing* microservices exploration project!
 
+## Dataflow description
+### aws-simple-storage-service
+- Retrieves videos stored in s3 buckets from aws.
+### video-streaming
+- Streams the video
+- Retrieves list of all videos from MongoDB 'video' database
+- Forwards request for videos to aws-simple-storage-service 
+- Publishes messages to RabbitMQ 'queue_history'
+### Kafka (video)
+- The video queue receives a message each time a video is played.
+- ```
+  key = <video-streaming>
+  value = <video-title>
+  ```
+### history
+- Consumes RabbitMQ queue_history messages keeping an ArrayList of all the videos viewed.
+- Prints the total number of videos viewed
+### MongoDB (videos)
+- Stores a reference to the videos stored in s3
+### database-fixture
+- Loads data representing the videos available on s3 into MongoDB videos 
+
 ## 10,000 Feet Overview
 
 This is a video streaming application developed with the microservice architecture inspired by Bootstrapping

@@ -27,9 +27,8 @@ dependencies {
     // Web
     implementation("org.springframework.boot:spring-boot-starter-web")
 
-    // RabbitMQ
-    implementation("org.springframework.boot:spring-boot-starter-amqp")
-    implementation("com.rabbitmq:amqp-client:5.20.0")
+    // Kafka
+    implementation("org.apache.kafka:kafka_2.13:4.0.0")
 
     // Lombok
     compileOnly("org.projectlombok:lombok:1.18.30")

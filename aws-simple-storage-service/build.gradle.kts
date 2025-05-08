@@ -70,7 +70,6 @@ tasks.register<Copy>("getDependencies") {
     }
 }
 
-
 configure<com.diffplug.gradle.spotless.SpotlessExtension> {
     java {
         indentWithSpaces()

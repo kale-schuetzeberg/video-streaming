@@ -1,4 +1,4 @@
-package com.baddog.videostreaming;
+package com.baddog.videostreaming.model;
 
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;

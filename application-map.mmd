@@ -1,0 +1,9 @@
+---
+title: Order example
+---
+flowchart TB
+    aws-simple-storage-service --- video-streaming
+    database-fixture --- MongoDB:videos
+    video-streaming --- Kafka:videos
+    video-streaming --- MongoDB:videos
+    Kafka:videos --- history

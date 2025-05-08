@@ -1,5 +1,6 @@
-package com.baddog.videostreaming;
+package com.baddog.videostreaming.service;
 
+import com.baddog.videostreaming.model.VideoDO;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.mongodb.repository.Query;
 

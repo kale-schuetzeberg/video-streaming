@@ -1,4 +1,4 @@
-package com.baddog.history;
+package com.baddog.history.model;
 
 import lombok.Data;
 

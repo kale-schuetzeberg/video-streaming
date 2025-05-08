@@ -31,7 +31,6 @@ public class BucketService implements BucketServiceInterface {
           int numberOfBytesToWrite = 0;
           byte[] data = new byte[1024];
           while ((numberOfBytesToWrite = inputStream.read(data, 0, data.length)) != -1) {
-            System.out.println("Writing some bytes..");
             outputStream.write(data, 0, numberOfBytesToWrite);
           }
           inputStream.close();
