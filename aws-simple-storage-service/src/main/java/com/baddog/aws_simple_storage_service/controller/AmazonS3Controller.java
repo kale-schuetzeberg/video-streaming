@@ -1,6 +1,5 @@
 package com.baddog.aws_simple_storage_service.controller;
 
-import com.amazonaws.services.s3.model.ObjectListing;
 import com.baddog.aws_simple_storage_service.service.AmazonS3Service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -17,8 +16,8 @@ public class AmazonS3Controller {
   private final AmazonS3Service bucketService;
 
   @GetMapping("/videos")
-  public ObjectListing getVideos(@RequestParam(name = "bucket") String bucket) {
-    return bucketService.getBucketObjects(bucket);
+  public ResponseEntity<?> getVideos(@RequestParam(name = "bucket") String bucket) {
+    return bucketService.getObjects(bucket);
   }
 
   @GetMapping("/video")

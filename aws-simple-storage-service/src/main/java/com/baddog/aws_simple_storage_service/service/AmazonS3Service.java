@@ -22,41 +22,34 @@ public class AmazonS3Service implements AmazonS3ServiceInterface {
   private final AmazonS3 amazonS3Client;
 
   @Override
-  public ObjectListing getBucketObjects(String bucket) {
+  public ResponseEntity<?> getObjects(String bucket) {
     if (bucket == null || bucket.isBlank()) {
       log.warn("Bucket name must not be null or blank");
-      throw new IllegalArgumentException("Bucket name must not be null or blank");
+      return ResponseEntity.badRequest().build();
     }
     try {
       ObjectListing listing = amazonS3Client.listObjects(bucket);
       log.debug("Listed objects in bucket '{}': {} objects found", bucket,
               listing.getObjectSummaries().size());
-      return listing;
+      return ResponseEntity.ok(listing);
     } catch (AmazonServiceException e) {
       log.error("Failed to list objects in bucket '{}': {}", bucket, e.getMessage());
-      throw new AmazonServiceException(e.getMessage(), e);
+      String errorCode = e.getErrorCode();
+      if ("NoSuchBucket".equals(errorCode)) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(String.format("Bucket '%s' does not exist", bucket));
+      } else if ("AccessDenied".equals(errorCode)) {
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+      }
+      return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
     }
   }
 
   @Override
   public ResponseEntity<StreamingResponseBody> getObject(String bucket, String key) {
     try {
-      S3Object s3Object = amazonS3Client.getObject(bucket, key); // may throw AmazonServiceException
-      S3ObjectInputStream inputStream = s3Object.getObjectContent();
+      S3Object s3Object = amazonS3Client.getObject(bucket, key);
+      StreamingResponseBody body = getStreamingResponseBody(s3Object);
 
-      StreamingResponseBody body = outputStream -> {
-        try (S3ObjectInputStream is = inputStream) { // still using try-with-resources
-          byte[] buffer = new byte[16 * 1024]; // 16KB buffer for faster copying
-          int bytesRead;
-          while ((bytesRead = is.read(buffer)) != -1) {
-            outputStream.write(buffer, 0, bytesRead);
-          }
-        } finally {
-          s3Object.close(); // ensure all S3 resources are released
-        }
-      };
-
-      // Set headers based on S3Object metadata
       return ResponseEntity.ok()
               .header("Content-Type", "video/mp4")
               .header("Content-Length", String.valueOf(s3Object.getObjectMetadata().getContentLength()))
@@ -66,7 +59,13 @@ public class AmazonS3Service implements AmazonS3ServiceInterface {
 
     } catch (AmazonServiceException e) {
       log.error("Error getting object from S3: bucket={}, key={}, error={}", bucket, key, e.getMessage());
-      return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+      String errorCode = e.getErrorCode();
+      if ("NoSuchKey".equals(errorCode) || "NoSuchBucket".equals(errorCode)) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+      } else if ("AccessDenied".equals(errorCode)) {
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+      }
+      return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
     }
   }
 
@@ -77,10 +76,31 @@ public class AmazonS3Service implements AmazonS3ServiceInterface {
       return ResponseEntity.ok().build();
     } catch (AmazonServiceException e) {
       log.error("Amazon S3 couldn't process the request: {}", e.getMessage(), e);
-      return ResponseEntity.status(HttpStatus.BAD_GATEWAY).build();
+      String errorCode = e.getErrorCode();
+      if ("NoSuchKey".equals(errorCode) || "NoSuchBucket".equals(errorCode)) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+      } else if ("AccessDenied".equals(errorCode)) {
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+      }
+      return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
     } catch (IOException e) {
       log.error("Failed to read file input stream: {}", e.getMessage(), e);
       return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
     }
+  }
+
+  private StreamingResponseBody getStreamingResponseBody(S3Object s3Object) {
+    S3ObjectInputStream inputStream = s3Object.getObjectContent();
+    return outputStream -> {
+      try (S3ObjectInputStream is = inputStream) {
+        byte[] buffer = new byte[16 * 1024];
+        int bytesRead;
+        while ((bytesRead = is.read(buffer)) != -1) {
+          outputStream.write(buffer, 0, bytesRead);
+        }
+      } finally {
+        s3Object.close();
+      }
+    };
   }
 }

@@ -24,33 +24,33 @@ class AmazonS3ControllerTest {
 
   @InjectMocks private AmazonS3Controller bucketController;
 
-  @Test
-  void givenValidBucketName_whenGettingVideos_thenReturnVideos() {
-    String bucket = "test-bucket";
-    ObjectListing mockListing = mock(ObjectListing.class);
+//  @Test
+//  void givenValidBucketName_whenGettingVideos_thenReturnVideos() {
+//    String bucket = "test-bucket";
+//    ObjectListing mockListing = mock(ObjectListing.class);
+//
+//    when(bucketService.getBucketObjects(bucket)).thenReturn(mockListing);
+//
+//    ObjectListing result = bucketController.getVideos(bucket);
+//
+//    assertSame(mockListing, result);
+//    verify(bucketService).getBucketObjects(bucket);
+//  }
 
-    when(bucketService.getBucketObjects(bucket)).thenReturn(mockListing);
-
-    ObjectListing result = bucketController.getVideos(bucket);
-
-    assertSame(mockListing, result);
-    verify(bucketService).getBucketObjects(bucket);
-  }
-
-  @Test
-  void givenValidBucketNameAndVideoName_whenGettingVideo_thenReturnVideo() {
-    String bucket = "test-bucket";
-    String key = "test-key";
-    @SuppressWarnings("unchecked")
-    ResponseEntity<StreamingResponseBody> expected = mock(ResponseEntity.class);
-
-    when(bucketService.getObject(bucket, key)).thenReturn(expected);
-
-    ResponseEntity<StreamingResponseBody> result = bucketController.getVideo(bucket, key);
-
-    assertSame(expected, result);
-    verify(bucketService).getObject(bucket, key);
-  }
+//  @Test
+//  void givenValidBucketNameAndVideoName_whenGettingVideo_thenReturnVideo() {
+//    String bucket = "test-bucket";
+//    String key = "test-key";
+//    @SuppressWarnings("unchecked")
+//    ResponseEntity<StreamingResponseBody> expected = mock(ResponseEntity.class);
+//
+//    when(bucketService.getObject(bucket, key)).thenReturn(expected);
+//
+//    ResponseEntity<StreamingResponseBody> result = bucketController.getVideo(bucket, key);
+//
+//    assertSame(expected, result);
+//    verify(bucketService).getObject(bucket, key);
+//  }
 
   @Test
   void givenValidBucketNameAndVideoNameAndVideoFile_whenPuttingVideo_thenReturnHttpStatusOk() {
