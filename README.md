@@ -3,6 +3,7 @@
 ## Dataflow description
 ### aws-simple-storage-service
 - Retrieves videos stored in s3 buckets from aws.
+- Uploads local videos to aws s3.
 ### video-streaming
 - Streams the video
 - Retrieves list of all videos from MongoDB 'video' database
