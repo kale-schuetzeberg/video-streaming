@@ -2,13 +2,20 @@ package com.baddog.aws_simple_storage_service.service;
 
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.ObjectListing;
+import com.amazonaws.services.s3.model.PutObjectRequest;
+import com.amazonaws.services.s3.model.PutObjectResult;
 import com.amazonaws.services.s3.model.S3Object;
 import com.amazonaws.services.s3.model.S3ObjectInputStream;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.method.annotation.StreamingResponseBody;
+
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 
 @Service
 @RequiredArgsConstructor
@@ -21,20 +28,32 @@ public class BucketService implements BucketServiceInterface {
   }
 
   @Override
-  public ResponseEntity<StreamingResponseBody> getObject(String bucket, String key) {
-    // Retrieve the S3 object
-    S3Object s3Object = amazonS3Client.getObject(bucket, key);
-    S3ObjectInputStream inputStream = s3Object.getObjectContent();
+      public ResponseEntity<StreamingResponseBody> getObject(String bucket, String key) {
+          S3Object s3Object = amazonS3Client.getObject(bucket, key);
+          S3ObjectInputStream inputStream = s3Object.getObjectContent();
 
-    final StreamingResponseBody body =
-        outputStream -> {
-          int numberOfBytesToWrite = 0;
-          byte[] data = new byte[1024];
-          while ((numberOfBytesToWrite = inputStream.read(data, 0, data.length)) != -1) {
-            outputStream.write(data, 0, numberOfBytesToWrite);
-          }
-          inputStream.close();
-        };
-    return new ResponseEntity<>(body, HttpStatus.OK);
+          StreamingResponseBody body = outputStream -> {
+              try (S3ObjectInputStream is = inputStream) {
+                  byte[] buffer = new byte[1024];
+                  int bytesRead;
+                  while ((bytesRead = is.read(buffer)) != -1) {
+                      outputStream.write(buffer, 0, bytesRead);
+                  }
+              }
+          };
+          return new ResponseEntity<>(body, HttpStatus.OK);
+      }
+
+
+      @Override
+  public ResponseEntity<?> putObject(String bucket, String key, MultipartFile file) {
+      try (InputStream inputStream = file.getInputStream()) {
+          amazonS3Client.putObject(bucket, key, inputStream, null);
+      } catch (Exception e) {
+          e.printStackTrace();
+          return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+      }
+      return new ResponseEntity<>(HttpStatus.OK);
   }
+
 }
