@@ -1,4 +1,4 @@
-package com.baddog.aws_simple_storage_service.config;
+package com.baddog.awssimplestorageservice.config;
 
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;

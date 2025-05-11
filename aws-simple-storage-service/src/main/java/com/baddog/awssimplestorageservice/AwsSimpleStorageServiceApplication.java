@@ -1,4 +1,4 @@
-package com.baddog.aws_simple_storage_service;
+package com.baddog.awssimplestorageservice;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

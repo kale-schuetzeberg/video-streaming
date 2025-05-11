@@ -1,4 +1,4 @@
-package com.baddog.aws_simple_storage_service.service;
+package com.baddog.awssimplestorageservice.service;
 
 import com.amazonaws.AmazonServiceException;
 import com.amazonaws.services.s3.AmazonS3;
@@ -22,21 +22,29 @@ public class AmazonS3Service implements AmazonS3ServiceInterface {
   private final AmazonS3 amazonS3Client;
 
   @Override
-  public ResponseEntity<?> getObjects(String bucket) {
+  public ResponseEntity<ObjectListing> getObjects(String bucket) {
+    log.info("getObjects called | bucket={}", bucket);
     if (bucket == null || bucket.isBlank()) {
-      log.warn("Bucket name must not be null or blank");
+      log.warn("getObjects - bucket name must not be null or blank");
       return ResponseEntity.badRequest().build();
     }
     try {
       ObjectListing listing = amazonS3Client.listObjects(bucket);
-      log.debug("Listed objects in bucket '{}': {} objects found", bucket,
-              listing.getObjectSummaries().size());
+      log.debug(
+          "getObjects success | bucket={} | numObjects={}",
+          bucket,
+          listing.getObjectSummaries().size());
       return ResponseEntity.ok(listing);
     } catch (AmazonServiceException e) {
-      log.error("Failed to list objects in bucket '{}': {}", bucket, e.getMessage());
+      log.error(
+          "getObjects failed | bucket={} | errorCode={} | message={}",
+          bucket,
+          e.getErrorCode(),
+          e.getMessage(),
+          e);
       String errorCode = e.getErrorCode();
       if ("NoSuchBucket".equals(errorCode)) {
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(String.format("Bucket '%s' does not exist", bucket));
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
       } else if ("AccessDenied".equals(errorCode)) {
         return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
       }
@@ -46,19 +54,29 @@ public class AmazonS3Service implements AmazonS3ServiceInterface {
 
   @Override
   public ResponseEntity<StreamingResponseBody> getObject(String bucket, String key) {
+    log.info("getObject called | bucket={} | key={}", bucket, key);
     try {
       S3Object s3Object = amazonS3Client.getObject(bucket, key);
+      log.debug("getObject success | bucket={} | key={}", bucket, key);
+
       StreamingResponseBody body = getStreamingResponseBody(s3Object);
 
       return ResponseEntity.ok()
-              .header("Content-Type", "video/mp4")
-              .header("Content-Length", String.valueOf(s3Object.getObjectMetadata().getContentLength()))
-              .header("Content-Disposition",
-                      "attachment; filename=\"" + key.substring(key.lastIndexOf('/') + 1) + "\"")
-              .body(body);
+          .header("Content-Type", "video/mp4")
+          .header("Content-Length", String.valueOf(s3Object.getObjectMetadata().getContentLength()))
+          .header(
+              "Content-Disposition",
+              "attachment; filename=\"" + key.substring(key.lastIndexOf('/') + 1) + "\"")
+          .body(body);
 
     } catch (AmazonServiceException e) {
-      log.error("Error getting object from S3: bucket={}, key={}, error={}", bucket, key, e.getMessage());
+      log.error(
+          "getObject failed | bucket={} | key={} | errorCode={} | message={}",
+          bucket,
+          key,
+          e.getErrorCode(),
+          e.getMessage(),
+          e);
       String errorCode = e.getErrorCode();
       if ("NoSuchKey".equals(errorCode) || "NoSuchBucket".equals(errorCode)) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
@@ -71,11 +89,23 @@ public class AmazonS3Service implements AmazonS3ServiceInterface {
 
   @Override
   public ResponseEntity<Void> putObject(String bucket, String key, MultipartFile file) {
+    log.info(
+        "putObject called | bucket={} | key={} | filename={}",
+        bucket,
+        key,
+        file.getOriginalFilename());
     try (InputStream inputStream = file.getInputStream()) {
       amazonS3Client.putObject(bucket, key, inputStream, null);
+      log.debug("putObject success | bucket={} | key={}", bucket, key);
       return ResponseEntity.ok().build();
     } catch (AmazonServiceException e) {
-      log.error("Amazon S3 couldn't process the request: {}", e.getMessage(), e);
+      log.error(
+          "putObject failed | bucket={} | key={} | errorCode={} | message={}",
+          bucket,
+          key,
+          e.getErrorCode(),
+          e.getMessage(),
+          e);
       String errorCode = e.getErrorCode();
       if ("NoSuchKey".equals(errorCode) || "NoSuchBucket".equals(errorCode)) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
@@ -84,7 +114,13 @@ public class AmazonS3Service implements AmazonS3ServiceInterface {
       }
       return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
     } catch (IOException e) {
-      log.error("Failed to read file input stream: {}", e.getMessage(), e);
+      log.error(
+          "putObject failed to read file | bucket={} | key={} | filename={} | message={}",
+          bucket,
+          key,
+          file.getOriginalFilename(),
+          e.getMessage(),
+          e);
       return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
     }
   }
@@ -98,6 +134,7 @@ public class AmazonS3Service implements AmazonS3ServiceInterface {
         while ((bytesRead = is.read(buffer)) != -1) {
           outputStream.write(buffer, 0, bytesRead);
         }
+        log.debug("getStreamingResponseBody finish streaming S3 object");
       } finally {
         s3Object.close();
       }

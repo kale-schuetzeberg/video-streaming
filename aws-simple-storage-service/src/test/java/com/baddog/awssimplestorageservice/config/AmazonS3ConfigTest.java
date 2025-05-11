@@ -1,4 +1,4 @@
-package com.baddog.aws_simple_storage_service.config;
+package com.baddog.awssimplestorageservice.config;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 

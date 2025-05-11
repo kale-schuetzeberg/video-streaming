@@ -1,6 +1,7 @@
-package com.baddog.aws_simple_storage_service.controller;
+package com.baddog.awssimplestorageservice.controller;
 
-import com.baddog.aws_simple_storage_service.service.AmazonS3Service;
+import com.amazonaws.services.s3.model.ObjectListing;
+import com.baddog.awssimplestorageservice.service.AmazonS3Service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,7 +17,7 @@ public class AmazonS3Controller {
   private final AmazonS3Service bucketService;
 
   @GetMapping("/videos")
-  public ResponseEntity<?> getVideos(@RequestParam(name = "bucket") String bucket) {
+  public ResponseEntity<ObjectListing> getVideos(@RequestParam(name = "bucket") String bucket) {
     return bucketService.getObjects(bucket);
   }
 
@@ -27,7 +28,7 @@ public class AmazonS3Controller {
   }
 
   @PostMapping(value = "/upload", consumes = "multipart/form-data")
-  public ResponseEntity<?> putVideo(
+  public ResponseEntity<Void> putVideo(
       @RequestParam(name = "bucket") String bucket,
       @RequestParam(name = "key") String key,
       @RequestParam(name = "file") MultipartFile file) {
