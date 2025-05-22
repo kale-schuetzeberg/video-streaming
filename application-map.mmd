@@ -1,9 +1,18 @@
 ---
-title: Order example
+title: Video Streaming Architecture
 ---
 flowchart TB
-    aws-simple-storage-service --- video-streaming
-    database-fixture --- MongoDB:videos
-    video-streaming --- Kafka:videos
+    user --- ui
+    ui --- api-gateway
+    ui -- presignedURL --- video-streaming
+    ui -- presignedURL --- video-upload
+    api-gateway --- auth0
+    api-gateway  --- presigned-url-generator
+    presigned-url-generator --- s3
+    transcoder --- s3
+    video-streaming --- s3
+    video-upload --- transcoder
+    presigned-url-generator --- MongoDB:videos
+    transcoder --- MongoDB:videos
+    video-upload --- MongoDB:videos
     video-streaming --- MongoDB:videos
-    Kafka:videos --- history

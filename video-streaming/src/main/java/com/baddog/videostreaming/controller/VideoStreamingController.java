@@ -21,7 +21,6 @@ public class VideoStreamingController {
     return videoStreamingService.getAllVideos();
   }
 
-  // TODO: Convert to WebFlux
   @GetMapping("/video")
   public void streamVideo(
       @RequestParam("id") String id, HttpServletRequest request, HttpServletResponse response)
