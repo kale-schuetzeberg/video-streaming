@@ -1,0 +1,60 @@
+# AWS SAM/Serverless Framework build artifacts
+.aws-sam/
+.serverless/
+.cloudformation/
+
+# AWS Lambda deployment packages
+*.zip
+
+# System files
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Node.js projects
+node_modules/
+npm-debug.log
+yarn-error.log
+package-lock.json
+yarn.lock
+
+# Python projects
+__pycache__/
+*.pyc
+*.pyo
+env/
+venv/
+instance/
+.venv/
+.Python
+
+# Go projects
+bin/
+vendor/
+*.exe
+*.dll
+*.so
+*.dylib
+*.test
+
+# IDEs and editors
+.idea/
+.vscode/
+*.sw?
+*.swo
+
+# Credentials and environment
+.env
+*.env
+.env.*
+*.pem
+
+# Test outputs
+coverage/
+*.coverprofile
+
+# Misc
+*.tmp
+*.bak
